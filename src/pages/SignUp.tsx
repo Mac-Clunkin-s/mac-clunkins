@@ -137,8 +137,8 @@ export default function SignUp() {
           />
           <SelectField
             id="businessType"
-            label="Business type"
-            required
+            label={role === 'buyer' ? 'Business type (optional)' : 'Business type'}
+            required={role !== 'buyer'}
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value as BusinessType)}
           >
