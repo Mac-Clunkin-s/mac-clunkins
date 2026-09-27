@@ -7,7 +7,6 @@ import { useSupabaseQuery } from '../../lib/useQuery';
 
 interface TripRow {
   id: string;
-  delivery_fee_cents: number;
   driver_share_cents: number;
   status: string;
 }
@@ -17,7 +16,7 @@ export default function DriverTrips() {
     () =>
       supabase
         .from('trips')
-        .select('id, delivery_fee_cents, driver_share_cents, status')
+        .select('id, driver_share_cents, status')
         .order('created_at', { ascending: false }),
     [],
   );
