@@ -18,7 +18,8 @@ role-dashboard shell of the app. Ordering, fulfilment and payments are later pha
 supabase/migrations/   SQL migrations — extensions, enums, tables, helpers, RLS, views, signup
 supabase/seed.sql      Seed data: reference tables, settings, and one test account per role
 supabase/local/        Docker-less local Postgres bootstrap (auth schema shim, role grants)
-scripts/local-db.sh    Runs a real Postgres 17 + PostGIS cluster without Docker
+scripts/local-db.sh              Runs a real Postgres 17 + PostGIS cluster without Docker
+scripts/paperclip-cost-report.mjs  Org-level agent spend report (see below) — not app code
 tests/rls/             RLS privacy test suite — exercises real Postgres roles, not the UI
 src/                   The Vite/React app
 ```
@@ -140,3 +141,12 @@ service to sign in against.
   Supabase project. Verify this against a real or `supabase start` project before shipping.
 - Deployment: hosting is Hostinger via hPanel Git (pulls a branch straight into the document
   root — no `npm install` or `vite build` on the host), not Vercel. Not a Phase 1 concern.
+
+## Paperclip org cost report
+
+`scripts/paperclip-cost-report.mjs` is a company-ops tool, unrelated to the chicken-marketplace
+app — it lives here only because this is the durable repo available to the agent. Run
+`node scripts/paperclip-cost-report.mjs` inside an agent run (or with `PAPERCLIP_API_URL`,
+`PAPERCLIP_API_KEY`, `PAPERCLIP_COMPANY_ID` exported) to print spend by day-window and by agent,
+plus failed-run waste, aggregated straight from heartbeat-run `usageJson` (the `costs/*` rollup
+endpoints report $0 while `billingType` is `subscription_included`).
