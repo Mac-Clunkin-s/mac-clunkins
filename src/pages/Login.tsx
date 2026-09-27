@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth, roleHomePath } from '../auth/AuthContext';
 import { Button } from '../components/Button';
@@ -6,13 +6,37 @@ import { FormError, TextField } from '../components/FormField';
 import { supabase } from '../lib/supabase';
 
 export default function Login() {
-  const { session, profile, loading, signIn } = useAuth();
+  const { session, profile, loading, signIn, signOut } = useAuth();
   const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resetSent, setResetSent] = useState(false);
+
+  const suspended = !loading && !!session && profile?.status === 'suspended';
+
+  // A suspended account must lose access immediately, not after ProtectedRoute
+  // eventually re-evaluates — sign it back out the moment we see the status.
+  useEffect(() => {
+    if (suspended) void signOut();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [suspended]);
+
+  if (suspended) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream px-6 py-12 text-ink">
+        <div className="w-full max-w-sm text-center">
+          <Link to="/" className="font-heading text-xl font-bold text-chilli">
+            McCluckin&rsquo;s
+          </Link>
+          <p className="mt-6 font-body text-sm text-ink/60">
+            This account has been suspended. Contact McCluckin&rsquo;s support for help.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!loading && session && profile) {
     const redirectTo =
