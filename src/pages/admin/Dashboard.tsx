@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { DashboardShell } from '../../components/DashboardShell';
 import { PageSpinner } from '../../components/PageSpinner';
 import { FormError } from '../../components/FormField';
@@ -37,31 +38,53 @@ async function loadCounts() {
 export default function AdminDashboard() {
   const { data: counts, loading, error } = useSupabaseQuery<Counts>(loadCounts, []);
 
-  const tiles: { label: string; value: number | undefined }[] = [
+  const tiles: { label: string; value: number | undefined; to?: string }[] = [
     { label: 'Orders', value: counts?.orders },
-    { label: 'Accounts pending approval', value: counts?.pendingAccounts },
+    { label: 'Accounts pending approval', value: counts?.pendingAccounts, to: '/admin/users' },
     { label: 'Allocations', value: counts?.allocations },
     { label: 'Trips', value: counts?.trips },
   ];
 
   return (
     <DashboardShell roleLabel="Admin">
-      <h1 className="font-heading text-2xl font-bold">Dashboard</h1>
-      <p className="mt-1 font-body text-sm text-ink/60">
-        The only role that reads every order, party and money figure.
-      </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-heading text-2xl font-bold">Dashboard</h1>
+          <p className="mt-1 font-body text-sm text-ink/60">
+            The only role that reads every order, party and money figure.
+          </p>
+        </div>
+        <Link to="/admin/users" className="font-body text-sm font-semibold text-chilli hover:underline">
+          Manage users &rarr;
+        </Link>
+      </div>
 
       <div className="mt-6">
         {loading && <PageSpinner label="Loading dashboard…" />}
         {error && <FormError message={`Couldn't load dashboard data: ${error.message}`} />}
         {!loading && !error && (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {tiles.map((tile) => (
-              <div key={tile.label} className="rounded-2xl bg-white p-5 shadow-sm">
-                <p className="font-heading text-3xl font-extrabold text-chilli">{tile.value}</p>
-                <p className="mt-1 font-body text-sm text-ink/60">{tile.label}</p>
-              </div>
-            ))}
+            {tiles.map((tile) => {
+              const content = (
+                <>
+                  <p className="font-heading text-3xl font-extrabold text-chilli">{tile.value}</p>
+                  <p className="mt-1 font-body text-sm text-ink/60">{tile.label}</p>
+                </>
+              );
+              return tile.to ? (
+                <Link
+                  key={tile.label}
+                  to={tile.to}
+                  className="rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md"
+                >
+                  {content}
+                </Link>
+              ) : (
+                <div key={tile.label} className="rounded-2xl bg-white p-5 shadow-sm">
+                  {content}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

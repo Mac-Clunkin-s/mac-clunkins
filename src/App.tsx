@@ -10,6 +10,7 @@ import BuyerOrders from './pages/buyer/Orders';
 import SupplierJobs from './pages/supplier/Jobs';
 import DriverTrips from './pages/driver/Trips';
 import AdminDashboard from './pages/admin/Dashboard';
+import AdminUsers from './pages/admin/Users';
 
 export default function App() {
   return (
@@ -51,6 +52,14 @@ export default function App() {
         element={
           <ProtectedRoute allow={['admin']}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute allow={['admin']}>
+            <AdminUsers />
           </ProtectedRoute>
         }
       />
