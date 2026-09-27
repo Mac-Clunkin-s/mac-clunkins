@@ -14,8 +14,7 @@
     "db:down": "bash scripts/local-db.sh down",
     "db:reset": "bash scripts/local-db.sh reset",
     "db:psql": "bash scripts/local-db.sh psql",
-    "test:rls": "node --test tests/rls/*.test.mjs",
-    "test:htaccess": "bash tests/htaccess/verify-htaccess.sh"
+    "test:rls": "node --test tests/rls/*.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
