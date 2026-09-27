@@ -43,6 +43,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [pdmaNumber, setPdmaNumber] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -50,7 +51,7 @@ export default function SignUp() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!acceptedTerms) {
-      setError('Please accept the Terms and Refund policy to continue.');
+      setError('Please agree to the Terms and the Privacy & Collection Notice to continue.');
       return;
     }
     setSubmitting(true);
@@ -64,6 +65,7 @@ export default function SignUp() {
       businessType: businessType || undefined,
       whatsappPhone: whatsapp,
       pdmaNumber: role === 'buyer' ? pdmaNumber || undefined : undefined,
+      marketingOptIn,
     });
     setSubmitting(false);
     if (signUpError) {
@@ -195,15 +197,27 @@ export default function SignUp() {
               onChange={(e) => setAcceptedTerms(e.target.checked)}
             />
             <span>
-              I accept the{' '}
+              I agree to the{' '}
               <Link to="/legal/terms" className="text-chilli hover:underline">
                 Terms
               </Link>{' '}
-              and{' '}
-              <Link to="/legal/refunds" className="text-chilli hover:underline">
-                Refund policy
+              and have read the{' '}
+              <Link to="/legal/privacy" className="text-chilli hover:underline">
+                Privacy &amp; Collection Notice
               </Link>
-              .
+              , including that my data is processed outside South Africa.
+            </span>
+          </label>
+          <label className="flex items-start gap-2 font-body text-sm text-ink/70">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={marketingOptIn}
+              onChange={(e) => setMarketingOptIn(e.target.checked)}
+            />
+            <span>
+              Send me offers and promotions by WhatsApp or email (optional — you can turn
+              this off any time).
             </span>
           </label>
           <FormError message={error} />

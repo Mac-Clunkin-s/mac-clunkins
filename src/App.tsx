@@ -4,6 +4,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Pending from './pages/Pending';
 import Legal from './pages/Legal';
+import PrivacyNotice from './pages/PrivacyNotice';
 import NotFound from './pages/NotFound';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import BuyerOrders from './pages/buyer/Orders';
@@ -21,7 +22,7 @@ export default function App() {
       <Route path="/pending" element={<Pending />} />
       <Route path="/legal/terms" element={<Legal page="terms" />} />
       <Route path="/legal/refunds" element={<Legal page="refunds" />} />
-      <Route path="/legal/privacy" element={<Legal page="privacy" />} />
+      <Route path="/legal/privacy" element={<PrivacyNotice />} />
 
       <Route
         path="/orders"

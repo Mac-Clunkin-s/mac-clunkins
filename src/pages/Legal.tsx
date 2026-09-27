@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 const COPY: Record<string, { title: string; body: string }> = {
   terms: {
     title: 'Terms of service',
-    body: 'Draft — published here once legal review of the Compliance and onboarding tab is complete.',
+    body: 'Draft — published here once legal review of the Compliance and onboarding tab is complete. For what we collect and why, see the privacy & collection notice.',
   },
   refunds: {
     title: 'Refund policy',
     body: 'Draft — published here once the cancellation and refund rules are finalised.',
-  },
-  privacy: {
-    title: 'Privacy',
-    body: 'Draft — buyers, suppliers and drivers never see each other’s identities, prices or contact details. Full POPIA notice to follow.',
   },
 };
 

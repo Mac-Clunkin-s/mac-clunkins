@@ -69,7 +69,12 @@ insert into public.settings (key, value, is_public, description) values
   ('heat_warn_c',            '30'::jsonb,     false, 'Forecast above this triggers a heat warning, °C'),
   ('journey_warn_hours',     '2'::jsonb,      false, 'Journey longer than this triggers a warning'),
   -- Not decided yet. Stays null; the app must render "not set", never a silent default.
-  ('delivery_timeline',      null,            true,  'Delivery promise after payment — NOT DECIDED YET')
+  ('delivery_timeline',      null,            true,  'Delivery promise after payment — NOT DECIDED YET'),
+  -- Document versioning (IDE-21 workstream A, G5): a version bump is a data change here,
+  -- not a code change. Public because the privacy notice page shows it to anonymous
+  -- visitors before they sign up.
+  ('privacy_notice_effective_date', '"2026-09-27"'::jsonb, true, 'Effective date of privacy_notice_v1'),
+  ('terms_effective_date',          '"2026-09-27"'::jsonb, true, 'Effective date of terms_v1 (draft — see /legal/terms)')
 on conflict (key) do nothing;
 
 -- ---------------------------------------------------------------------------

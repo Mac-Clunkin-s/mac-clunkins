@@ -30,3 +30,22 @@ export interface Profile {
   created_at: string;
   updated_at: string;
 }
+
+export type ConsentType =
+  | 'terms'
+  | 'privacy_notice'
+  | 'cross_border_transfer'
+  | 'service_messaging'
+  | 'marketing_messaging';
+export type ConsentSource = 'signup' | 'settings' | 'reconsent';
+
+export interface Consent {
+  id: string;
+  profile_id: string;
+  consent_type: ConsentType;
+  document_version: string;
+  granted: boolean;
+  source: ConsentSource;
+  superseded_by: string | null;
+  recorded_at: string;
+}

@@ -375,8 +375,9 @@ describe('8. anonymous reads only the public reference data', () => {
     await asRole(db, null, async ({ q, tryQ }) => {
       const keys = (await q('select key from public.settings order by key')).map((r) => r.key);
       assert.deepEqual(keys, [
-        'delivery_timeline', 'issue_window_hours', 'min_order', 'quote_hold_minutes',
-        'rfq_max_km', 'rfq_min_birds', 'unpaid_cancel_hours',
+        'delivery_timeline', 'issue_window_hours', 'min_order',
+        'privacy_notice_effective_date', 'quote_hold_minutes',
+        'rfq_max_km', 'rfq_min_birds', 'terms_effective_date', 'unpaid_cancel_hours',
       ]);
       for (const secret of ['markup_pct', 'min_margin_cents', 'service_fee_pct', 'driver_share_pct']) {
         await assertNoData(
@@ -389,7 +390,7 @@ describe('8. anonymous reads only the public reference data', () => {
     });
   });
 
-  test('every one of the other 22 tables yields nothing', async () => {
+  test('every one of the other 23 tables yields nothing', async () => {
     const outcomes = {};
     await asRole(db, null, async ({ tryQ }) => {
       for (const table of ALL_TABLES) {
@@ -397,7 +398,7 @@ describe('8. anonymous reads only the public reference data', () => {
         outcomes[table] = await assertNoData(tryQ, `select * from public.${table}`, [], `anon -> ${table}`);
       }
     });
-    assert.equal(Object.keys(outcomes).length, 22, 'all 22 non-public tables must be checked');
+    assert.equal(Object.keys(outcomes).length, 23, 'all 23 non-public tables must be checked');
   });
 
   test('anonymous cannot create a profile or write anything', async () => {
@@ -426,7 +427,7 @@ describe('9. an admin reads everything', () => {
       assert.equal((await q('select * from public.supplier_prices')).length, 4);
       assert.equal((await q('select * from public.supplier_details')).length, 2);
       assert.equal((await q('select * from public.payments')).length, 2);
-      assert.equal((await q('select key from public.settings')).length, 16);
+      assert.equal((await q('select key from public.settings')).length, 18);
       // The three column-restricted tables: every row, read through the admin view.
       assert.equal((await q('select * from public.admin_allocations')).length, 1);
       assert.equal((await q('select * from public.admin_trips')).length, 1);
@@ -493,5 +494,88 @@ describe('9. an admin reads everything', () => {
     } finally {
       await db.query('rollback');
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 10. consents — append-only; owner reads own rows, admin reads all, nobody writes
+// ---------------------------------------------------------------------------
+
+describe('10. consents — append-only, own rows + admin only', () => {
+  test('the signup trigger wrote the expected rows for a self-registered account', async () => {
+    await asRole(db, USERS.buyer, async ({ q }) => {
+      const rows = await q(
+        'select consent_type, document_version, granted, source from public.consents order by consent_type',
+      );
+      assert.deepEqual(
+        rows.map((r) => r.consent_type).sort(),
+        ['cross_border_transfer', 'marketing_messaging', 'privacy_notice', 'service_messaging', 'terms'],
+      );
+      for (const row of rows) {
+        assert.equal(row.source, 'signup', `${row.consent_type} should come from signup`);
+        assert.ok(
+          row.document_version === 'terms_v1' || row.document_version === 'privacy_notice_v1',
+          `${row.consent_type} has an unexpected document_version: ${row.document_version}`,
+        );
+        if (row.consent_type === 'marketing_messaging') {
+          assert.equal(row.granted, false, 'seed data never opts in to marketing');
+        } else {
+          assert.equal(row.granted, true, `${row.consent_type} must be granted at signup`);
+        }
+      }
+    });
+  });
+
+  test('a role cannot read another account’s consent rows', async () => {
+    await asRole(db, USERS.supplier, async ({ tryQ }) => {
+      await assertNoData(
+        tryQ, 'select * from public.consents where profile_id = $1', [USERS.buyer],
+        "supplier -> buyer's consents",
+      );
+    });
+    await asRole(db, USERS.buyer, async ({ tryQ }) => {
+      await assertNoData(
+        tryQ, 'select * from public.consents where profile_id = $1', [USERS.otherBuyer],
+        "buyer -> another buyer's consents",
+      );
+    });
+  });
+
+  test('no role may update a consent row, including the owner and an admin', async () => {
+    for (const [label, uid] of [['owner', USERS.buyer], ['admin', USERS.admin]]) {
+      await asRole(db, uid, async ({ tryQ }) => {
+        const result = await tryQ(
+          "update public.consents set granted = false where profile_id = $1 and consent_type = 'terms'",
+          [USERS.buyer],
+        );
+        assert.equal(result.ok, false, `${label} must not be able to update a consent row`);
+        assert.equal(result.error.code, '42501');
+      });
+    }
+  });
+
+  test('no role may delete a consent row, including the owner and an admin', async () => {
+    for (const [label, uid] of [['owner', USERS.buyer], ['admin', USERS.admin]]) {
+      await asRole(db, uid, async ({ tryQ }) => {
+        const result = await tryQ(
+          "delete from public.consents where profile_id = $1 and consent_type = 'terms'",
+          [USERS.buyer],
+        );
+        assert.equal(result.ok, false, `${label} must not be able to delete a consent row`);
+        assert.equal(result.error.code, '42501');
+      });
+    }
+  });
+
+  test('an admin reads every account’s consent rows', async () => {
+    await asRole(db, USERS.admin, async ({ q }) => {
+      const rows = await q('select profile_id from public.consents');
+      // Six self-registered seed accounts x five consent types each. The admin account
+      // is inserted with the signup trigger disabled on purpose, so it holds none.
+      assert.equal(rows.length, 30);
+      const distinctProfiles = new Set(rows.map((r) => r.profile_id));
+      assert.equal(distinctProfiles.size, 6);
+      assert.ok(!distinctProfiles.has(USERS.admin));
+    });
   });
 });

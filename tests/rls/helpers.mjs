@@ -47,7 +47,7 @@ export const ALL_TABLES = [
   'supplier_requirements', 'stock', 'driver_details', 'documents', 'delivery_slots',
   'quotes', 'orders', 'allocations', 'trips', 'payments', 'transfers', 'refunds',
   'cases', 'case_events', 'ratings', 'order_events', 'pdma_reports', 'notifications',
-  'audit_log', 'settings', 'areas_served',
+  'audit_log', 'settings', 'areas_served', 'consents',
 ];
 
 export const PUBLIC_TABLES = ['provinces', 'delivery_slots', 'areas_served'];

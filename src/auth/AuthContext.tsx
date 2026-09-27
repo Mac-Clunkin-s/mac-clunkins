@@ -19,6 +19,9 @@ export interface SignUpInput {
   whatsappPhone: string;
   pdmaNumber?: string;
   language?: AppLanguage;
+  /** Independent opt-in for marketing messages, default false. Never inferred from
+   *  agreeing to the terms/privacy notice — see the consents table. */
+  marketingOptIn?: boolean;
 }
 
 interface AuthState {
@@ -101,6 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           whatsapp_phone: input.whatsappPhone,
           pdma_number: input.pdmaNumber,
           language: input.language ?? 'en',
+          marketing_opt_in: input.marketingOptIn ?? false,
         },
       },
     });
