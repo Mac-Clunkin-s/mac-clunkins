@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.localdb/
+.claude/
+.env
+.env.local
+*.log

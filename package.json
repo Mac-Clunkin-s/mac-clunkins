@@ -1,0 +1,44 @@
+{
+  "name": "mccluckins",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "McCluckin's — live-chicken ordering marketplace for South Africa",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "eslint .",
+    "db:up": "bash scripts/local-db.sh up",
+    "db:down": "bash scripts/local-db.sh down",
+    "db:reset": "bash scripts/local-db.sh reset",
+    "db:psql": "bash scripts/local-db.sh psql",
+    "test:rls": "node --test tests/rls/*.test.mjs",
+    "test:htaccess": "bash tests/htaccess/verify-htaccess.sh"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.20.4",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^15.15.0",
+    "pg": "^8.23.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^5.4.21"
+  }
+}
