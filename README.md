@@ -78,7 +78,7 @@ cp .env.example .env
 Fill in from your Supabase project's Settings → API:
 
 | Variable                  | Where it comes from                              |
-| -------------------------- | ------------------------------------------------- |
+| ----------------------------- | ---------------------------------------------- |
 | `VITE_SUPABASE_URL`        | Project Settings → API → Project URL              |
 | `VITE_SUPABASE_ANON_KEY`   | Project Settings → API → anon / public key         |
 
@@ -150,3 +150,56 @@ app — it lives here only because this is the durable repo available to the age
 `PAPERCLIP_API_KEY`, `PAPERCLIP_COMPANY_ID` exported) to print spend by day-window and by agent,
 plus failed-run waste, aggregated straight from heartbeat-run `usageJson` (the `costs/*` rollup
 endpoints report $0 while `billingType` is `subscription_included`).
+
+## Testing
+
+| Command | What it runs | Needs |
+| --- | --- | --- |
+| `npm test` | Vitest unit and component tests (jsdom): i18n, the privacy-assertion helper, Paystack/webhook fixtures | nothing |
+| `npm run test:rls` | RLS privacy suite against real Postgres roles | `npm run db:up` |
+| `npm run test:api` | API and webhook tests in `tests/api` (Node environment, real Postgres via `PG*` env vars) | `npm run db:up` |
+| `npm run test:e2e` | Playwright, mobile (Pixel 7) and desktop Chrome | a browser: `npx playwright install chromium` |
+| `npm run test:i18n` | Translation coverage per language; fails on keys that English lacks | nothing |
+| `npm run test:coverage` | Vitest with v8 coverage | nothing |
+
+**Playwright.** `npm run test:e2e` starts `npm run dev` itself, or set `E2E_BASE_URL` to test a
+running deployment. `smoke.spec.ts` runs anywhere. The role journeys (`buyer`, `supplier`,
+`driver`, `admin`) and `privacy.spec.ts` need a live Supabase backend with the seed loaded, so they
+skip unless `E2E_LIVE_BACKEND=1` and `VITE_SUPABASE_URL` are set (use `supabase start`, never
+production). Specs for screens that have not merged yet are `test.fixme` with the reason in the
+test; remove the `fixme` when the screen lands. Fixed route paths live in
+`tests/e2e/helpers/routes.ts`. The service-role key, used only to create throwaway users, is read
+from `E2E_SUPABASE_SERVICE_ROLE_KEY` in the environment and nowhere else.
+
+**Privacy in the browser.** `tests/e2e/helpers/privacy.ts` records the JSON each role's browser
+receives and `assertNoForbiddenKeys(response, forbiddenKeys)` fails if a key such as a supplier
+name, buyer phone or supplier price appears. Per-role key sets are in `FORBIDDEN_FOR`; add each new
+screen's route to `privacy.spec.ts`.
+
+**API fixtures.** `tests/api/_fixtures/` has a seed helper, the Paystack HMAC-SHA512 signature
+helper (`signPaystackPayload`, `verifyPaystackSignature`) and builders for the `charge.success`,
+`transfer.success`, `transfer.failed`, `refund.processed` and `charge.dispute.create` webhooks
+(`signedWebhook` returns the exact body and header to POST). Put actual API tests next to them in
+`tests/api/*.test.ts`.
+
+**Translations.** See [`docs/i18n.md`](docs/i18n.md).
+
+## CI/CD
+
+- **CI** (`.github/workflows/ci.yml`, every pull request and push to `main`):
+  - `web`: lint, typecheck, i18n coverage check, Vitest, production build.
+  - `database`: Postgres 17 + PostGIS service; applies the Supabase shim, every migration in
+    filename order (and rejects duplicate or malformed migration timestamps), the seed and role
+    grants, then runs the RLS suite and `tests/api`.
+  - `e2e`: Playwright on Chromium (mobile and desktop); `test.fixme` specs are skipped, and live-backend
+    specs skip without a backend.
+- **Migrations** (`.github/workflows/migrate.yml`): a push to `main` that touches
+  `supabase/migrations/**` runs `supabase db push --dry-run` and then `supabase db push` against the
+  production project, inside the `production-db` GitHub environment. **One-time setup:** in
+  Settings > Environments create `production-db`, add required reviewers (this is the manual
+  approval), and add the secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD` and
+  `SUPABASE_PROJECT_REF`. Migrations are forwards-only: write them to be safe to apply once.
+- **Pull requests** use `.github/pull_request_template.md`: privacy rule, money in cents, migration
+  included, tests added, and CTO + board review for anything touching pricing, payments or payouts.
+- Dependencies install with `npm install` in CI until `package-lock.json` is regenerated to include
+  the test tooling; then switch the workflows to `npm ci`.
