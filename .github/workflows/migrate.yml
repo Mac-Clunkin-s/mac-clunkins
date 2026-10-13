@@ -1,0 +1,57 @@
+name: Migrate production database
+
+# Closes the "merged but never migrated" gap: when a migration lands on main, it is applied to the
+# production Supabase project here, after a human approves the `production-db` environment.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One migration run at a time, and never cancel one that is already applying.
+concurrency:
+  group: migrate-production
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    name: supabase db push
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Configure this environment in GitHub: Settings > Environments > production-db, with
+    # "Required reviewers" set (that is the manual approval) and the three secrets below.
+    environment: production-db
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Check required secrets
+        run: |
+          missing=0
+          for v in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD SUPABASE_PROJECT_REF; do
+            if [ -z "${!v}" ]; then echo "::error::Secret $v is not set on the production-db environment"; missing=1; fi
+          done
+          exit $missing
+
+      - name: Link project
+        run: |
+          [ -f supabase/config.toml ] || supabase init
+          supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Dry run (lists the migrations that would be applied)
+        run: supabase db push --dry-run --password "$SUPABASE_DB_PASSWORD"
+
+      - name: Apply
+        run: supabase db push --password "$SUPABASE_DB_PASSWORD"
