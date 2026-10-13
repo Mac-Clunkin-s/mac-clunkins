@@ -28,6 +28,27 @@ end
 $$;
 
 -- ---------------------------------------------------------------------------
+-- extensions schema (hosted Supabase installs PostGIS / pgcrypto here, not in public)
+-- The postgis/postgis image pre-installs PostGIS in public; move it on a fresh DB.
+-- ---------------------------------------------------------------------------
+
+create schema if not exists extensions;
+
+do $$
+begin
+  if exists (
+    select 1 from pg_extension e join pg_namespace n on n.oid = e.extnamespace
+    where e.extname = 'postgis' and n.nspname = 'public'
+  ) then
+    drop extension postgis cascade;
+  end if;
+end
+$$;
+
+create extension if not exists postgis with schema extensions;
+create extension if not exists pgcrypto with schema extensions;
+
+-- ---------------------------------------------------------------------------
 -- auth schema
 -- ---------------------------------------------------------------------------
 
