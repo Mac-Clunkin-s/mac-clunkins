@@ -78,7 +78,7 @@ cp .env.example .env
 Fill in from your Supabase project's Settings → API:
 
 | Variable                  | Where it comes from                              |
-| ----------------------------- | ---------------------------------------------- |
+| -------------------------- | ------------------------------------------------- |
 | `VITE_SUPABASE_URL`        | Project Settings → API → Project URL              |
 | `VITE_SUPABASE_ANON_KEY`   | Project Settings → API → anon / public key         |
 
