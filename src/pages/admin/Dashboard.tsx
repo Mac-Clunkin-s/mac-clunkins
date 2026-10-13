@@ -1,93 +1,97 @@
 import { Link } from 'react-router-dom';
-import { DashboardShell } from '../../components/DashboardShell';
-import { PageSpinner } from '../../components/PageSpinner';
-import { FormError } from '../../components/FormField';
-import { supabase } from '../../lib/supabase';
-import { useSupabaseQuery } from '../../lib/useQuery';
+import { loadDashboard } from './api';
+import { useAdminData } from './hooks/useAdminData';
+import { orderMoney } from './logic/orderMoney';
+import { ORDER_STATUSES } from './types';
+import { t } from './i18n';
+import { AdminLayout, DataTable, LoadState, Money, Pill, SectionTitle, card, tStatus, formatDateTime } from './ui';
 
-interface Counts {
-  orders: number;
-  pendingAccounts: number;
-  allocations: number;
-  trips: number;
-}
-
-async function loadCounts() {
-  const [orders, pending, allocations, trips] = await Promise.all([
-    supabase.from('orders').select('id', { count: 'exact', head: true }),
-    supabase
-      .from('profiles')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'pending'),
-    supabase.from('allocations').select('id', { count: 'exact', head: true }),
-    supabase.from('trips').select('id', { count: 'exact', head: true }),
-  ]);
-  const firstError = orders.error ?? pending.error ?? allocations.error ?? trips.error;
-  if (firstError) return { data: null, error: firstError };
-  return {
-    data: {
-      orders: orders.count ?? 0,
-      pendingAccounts: pending.count ?? 0,
-      allocations: allocations.count ?? 0,
-      trips: trips.count ?? 0,
-    },
-    error: null,
-  };
-}
+const PAID_STATES = ['paid', 'scheduled', 'ready', 'on_the_way', 'delivered', 'settled'];
 
 export default function AdminDashboard() {
-  const { data: counts, loading, error } = useSupabaseQuery<Counts>(loadCounts, []);
+  const { data, loading, error } = useAdminData(loadDashboard, []);
 
-  const tiles: { label: string; value: number | undefined; to?: string }[] = [
-    { label: 'Orders', value: counts?.orders },
-    { label: 'Accounts pending approval', value: counts?.pendingAccounts, to: '/admin/users' },
-    { label: 'Allocations', value: counts?.allocations },
-    { label: 'Trips', value: counts?.trips },
-  ];
+  const paidToday = (data?.todayOrders ?? []).filter((o) => PAID_STATES.includes(o.status));
+  const sales = paidToday.reduce((s, o) => s + o.total_cents, 0);
+  let margin = 0;
+  for (const o of paidToday) {
+    const allocs = (data?.allocations ?? []).filter((a) => a.order_id === o.id);
+    const m = orderMoney(
+      o, allocs,
+      (data?.trips ?? []).filter((tr) => allocs.some((a) => a.id === tr.allocation_id)),
+      (data?.payments ?? []).filter((p) => p.order_id === o.id),
+    );
+    if (!m.incomplete) margin += m.breakdown.marginCents;
+  }
+  const action = (data?.needsAction ?? []).filter((n) => n.count > 0);
 
   return (
-    <DashboardShell roleLabel="Admin">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-2xl font-bold">Dashboard</h1>
-          <p className="mt-1 font-body text-sm text-ink/60">
-            The only role that reads every order, party and money figure.
-          </p>
-        </div>
-        <Link to="/admin/users" className="font-body text-sm font-semibold text-chilli hover:underline">
-          Manage users &rarr;
-        </Link>
-      </div>
-
-      <div className="mt-6">
-        {loading && <PageSpinner label="Loading dashboard…" />}
-        {error && <FormError message={`Couldn't load dashboard data: ${error.message}`} />}
-        {!loading && !error && (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {tiles.map((tile) => {
-              const content = (
-                <>
-                  <p className="font-heading text-3xl font-extrabold text-chilli">{tile.value}</p>
-                  <p className="mt-1 font-body text-sm text-ink/60">{tile.label}</p>
-                </>
-              );
-              return tile.to ? (
-                <Link
-                  key={tile.label}
-                  to={tile.to}
-                  className="rounded-2xl bg-white p-5 shadow-sm transition hover:shadow-md"
-                >
-                  {content}
-                </Link>
+    <AdminLayout title={t('admin.dashboard.title')} subtitle={t('admin.dashboard.subtitle')}>
+      <LoadState loading={loading} error={error} hasData={!!data} label={t('admin.dashboard.loading')}>
+        {data && (
+          <div className="flex flex-col gap-6">
+            <section aria-label={t('admin.dashboard.needsAction')} className={card}>
+              <SectionTitle>{t('admin.dashboard.needsAction')}</SectionTitle>
+              {action.length === 0 ? (
+                <p className="font-body text-sm text-ink/60">{t('admin.dashboard.allClear')}</p>
               ) : (
-                <div key={tile.label} className="rounded-2xl bg-white p-5 shadow-sm">
-                  {content}
+                <ul className="flex flex-col gap-2">
+                  {action.map((n) => (
+                    <li key={n.key}>
+                      <Link to={n.to} className="flex items-center justify-between rounded-xl bg-cream px-4 py-3 font-body text-sm font-semibold hover:bg-mustard/20">
+                        <span>{t(`admin.dashboard.action.${n.key}`)}</span>
+                        <span className="rounded-full bg-chilli px-2.5 py-0.5 text-cream">{n.count}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <div className="hidden grid-cols-2 gap-4 md:grid lg:grid-cols-4">
+              {[
+                { label: t('admin.dashboard.ordersToday'), value: String(data.todayOrders.length) },
+                { label: t('admin.dashboard.salesToday'), value: <Money cents={sales} /> },
+                { label: t('admin.dashboard.marginToday'), value: <Money cents={margin} /> },
+                { label: t('admin.dashboard.transfersQueued'), value: <><span>{data.transfersQueued.count}</span> &middot; <Money cents={data.transfersQueued.cents} /></> },
+              ].map((tile) => (
+                <div key={tile.label} className={card}>
+                  <p className="font-heading text-2xl font-extrabold text-chilli">{tile.value}</p>
+                  <p className="mt-1 font-body text-sm text-ink/60">{tile.label}</p>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+
+            <section className="hidden md:block">
+              <SectionTitle>{t('admin.dashboard.pipeline')}</SectionTitle>
+              <div className="grid grid-cols-3 gap-3 lg:grid-cols-9">
+                {ORDER_STATUSES.map((s) => (
+                  <Link key={s} to={`/admin/orders?status=${s}`} className={`${card} !p-3 text-center hover:shadow-md`}>
+                    <p className="font-heading text-xl font-bold">{data.pipeline[s] ?? 0}</p>
+                    <p className="font-body text-xs text-ink/60">{tStatus('order', s)}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="hidden md:block">
+              <SectionTitle>{t('admin.dashboard.todayOrders')}</SectionTitle>
+              <DataTable
+                rows={data.todayOrders}
+                rowKey={(o) => o.id}
+                columns={[
+                  { key: 'n', header: t('admin.orders.col.number'), render: (o) => <Link className="font-semibold text-chilli hover:underline" to={`/admin/orders/${o.id}`}>{o.number}</Link> },
+                  { key: 'b', header: t('admin.orders.col.buyer'), render: (o) => o.buyer?.business_name ?? o.buyer?.full_name ?? '-' },
+                  { key: 'q', header: t('admin.orders.col.birds'), render: (o) => o.quantity },
+                  { key: 't', header: t('admin.orders.col.total'), render: (o) => <Money cents={o.total_cents} /> },
+                  { key: 's', header: t('admin.orders.col.status'), render: (o) => <Pill>{tStatus('order', o.status)}</Pill> },
+                  { key: 'p', header: t('admin.orders.col.placed'), render: (o) => formatDateTime(o.placed_at) },
+                ]}
+              />
+            </section>
           </div>
         )}
-      </div>
-    </DashboardShell>
+      </LoadState>
+    </AdminLayout>
   );
 }
