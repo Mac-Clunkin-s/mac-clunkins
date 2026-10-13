@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  web:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      # `npm install`, not `npm ci`, until package-lock.json is regenerated to include the test
+      # tooling added in the QA/CI PR. Switch back to `npm ci` once the lockfile is committed.
+      - run: npm install --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:i18n
+      - run: npm test
+      - run: npm run build
+
+  database:
+    name: Migrations, RLS suite, API tests (Postgres + PostGIS)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PGHOST: localhost
+      PGPORT: '5432'
+      PGUSER: postgres
+      PGDATABASE: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install --no-audit --no-fund
+
+      - name: Migration filenames are unique and ordered
+        run: |
+          set -euo pipefail
+          bad=$(ls supabase/migrations | grep -vE '^[0-9]{14}_[a-z0-9_]+\.sql$' || true)
+          if [ -n "$bad" ]; then echo "Bad migration filename(s):"; echo "$bad"; exit 1; fi
+          dupes=$(ls supabase/migrations | cut -d_ -f1 | sort | uniq -d || true)
+          if [ -n "$dupes" ]; then echo "Duplicate migration version(s) (two branches picked the same timestamp):"; echo "$dupes"; exit 1; fi
+
+      # Same order scripts/local-db.sh apply uses: Supabase shim, migrations, seed, role grants.
+      - name: Bootstrap Supabase shim
+        run: psql -v ON_ERROR_STOP=1 -q -f supabase/local/00_supabase_bootstrap.sql
+      - name: Apply migrations in order
+        run: |
+          set -euo pipefail
+          for f in $(ls supabase/migrations/*.sql | sort); do
+            echo "  $(basename "$f")"
+            psql -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+      - name: Seed
+        run: psql -v ON_ERROR_STOP=1 -q -f supabase/seed.sql
+      - name: Role grants
+        run: psql -v ON_ERROR_STOP=1 -q -f supabase/local/99_local_roles.sql
+
+      - name: RLS privacy suite
+        run: npm run test:rls
+      - name: API tests
+        run: npm run test:api
+
+  e2e:
+    name: Playwright (chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      # Enough for the app to boot and render public screens. Journey and privacy specs need a
+      # live backend and skip themselves (no E2E_LIVE_BACKEND), and test.fixme specs always skip.
+      VITE_SUPABASE_URL: http://127.0.0.1:54321
+      VITE_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
