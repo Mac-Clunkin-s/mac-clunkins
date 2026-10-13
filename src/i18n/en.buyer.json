@@ -1,0 +1,62 @@
+{
+  "buyer": {
+    "brand": "McCluckin’s",
+    "roleLabel": "Buyer",
+    "nav": {"label": "Buyer menu", "orders": "My orders", "newOrder": "New order", "profile": "Profile", "logout": "Log out"},
+    "birdType": {"broiler": "Broiler", "hardbody": "Hardbody", "indigenous": "Indigenous"},
+    "weightBand": {"under_1_5kg": "Under 1.5 kg", "1_5_to_2kg": "1.5 to 2 kg", "2_to_2_5kg": "2 to 2.5 kg", "2_5_to_3kg": "2.5 to 3 kg", "over_3kg": "Over 3 kg"},
+    "status": {"placed": "Awaiting payment", "paid": "Paid", "scheduled": "Scheduled", "ready": "Ready for pickup", "on_the_way": "On the way", "delivered": "Delivered", "settled": "Completed", "cancelled": "Cancelled", "refunded": "Refunded"},
+    "caseType": {"short_count": "Fewer birds than ordered", "sick_injured": "Sick or injured birds", "died": "Birds died", "late": "Late delivery", "failed_delivery": "Delivery failed", "payment": "Payment problem", "other": "Something else"},
+    "caseStatus": {"open": "Open", "in_review": "In review", "awaiting_info": "Awaiting info", "resolved": "Resolved", "closed": "Closed"},
+    "lines": {"birds": "{n} × {type}", "delivery": "Delivery", "service": "Service fee", "total": "Total"},
+    "orders": {
+      "title": "My orders", "newOrder": "New order", "loading": "Loading your orders…", "loadError": "Couldn't load orders: {message}",
+      "emptyTitle": "No orders yet", "emptyBody": "Place your first order and it will show up here.",
+      "searchPlaceholder": "Search by order number or bird type", "searchLabel": "Search orders", "filters": "Filter orders",
+      "filter": {"all": "All", "in_progress": "In progress", "delivered": "Delivered", "cancelled": "Cancelled"},
+      "inProgress": "In progress", "past": "Past orders", "monthTotal": "Total {amount}", "birdsLine": "{n} × {type}",
+      "noMatchTitle": "Nothing matches", "noMatchBody": "Try a different search or filter.",
+      "yearTotals": "Year totals", "year": "Year", "statSpent": "Spent", "statOrders": "Orders", "statBirds": "Birds delivered",
+      "col": {"order": "Order", "date": "Placed", "birds": "Birds", "status": "Status", "total": "Total"},
+      "invoice": "Invoice", "reorder": "Order again", "paging": "Pages", "prev": "Previous", "next": "Next", "pageOf": "Page {page} of {pages}"
+    },
+    "newOrder": {
+      "title": "New order", "birdType": "Bird type", "weightBand": "Weight band", "quantity": "How many birds (minimum {min})", "choose": "Choose…",
+      "address": "Delivery address", "savedAddress": "Deliver to", "newAddress": "A new address…", "province": "Province", "town": "Town or suburb", "street": "Street address",
+      "getQuote": "Get instant quote", "working": "Working…",
+      "errors": {"birdType": "Choose a bird type.", "weightBand": "Choose a weight band.", "quantityWhole": "Enter a whole number of birds.", "minQuantity": "The minimum order is {min} birds.", "address": "Add your delivery address: province, town and street."},
+      "requestTitle": "This one needs a custom quote",
+      "requestReason": {"too_many": "Orders over {maxBirds} birds are quoted by our team.", "too_far": "Deliveries over {maxKm} km are quoted by our team.", "no_match": "We can't price this delivery instantly, so our team will quote it for you."},
+      "requestCta": "Request a quote", "requestedTitle": "Quote requested", "requestedBody": "We'll come back to you with a price. You'll find it under My orders.", "backToOrders": "Back to my orders",
+      "reorderTitle": "Order the same again?", "todayTitle": "Today's delivery", "todayNone": "Nothing arriving today.", "pastTitle": "Recent orders", "pastNone": "No past orders yet.", "sideLabel": "Your activity"
+    },
+    "quote": {"instantTitle": "Your instant quote", "heldFor": "Price held for", "expired": "This quote has expired.", "continue": "Continue to payment", "refresh": "Get a fresh quote", "nothingCharged": "Nothing is charged until you pay on the next step."},
+    "pay": {
+      "title": "Review and pay", "loading": "Loading your quote…", "loadError": "Couldn't load this quote.", "noQuote": "No quote selected. Start a new order to get one.", "expired": "This quote has expired.", "notOpen": "This quote can no longer be paid.", "newQuote": "Get a new quote",
+      "methodsTitle": "You can pay with", "method": {"card": "Card", "eft": "Instant EFT", "capitec_pay": "Capitec Pay", "qr": "QR code"}, "testMode": "Test mode: no real money moves.",
+      "acceptTerms": "I accept the", "termsLink": "Terms of service", "acceptRefunds": "I accept the", "refundsLink": "Refund policy", "cta": "Pay with Paystack", "redirecting": "Taking you to Paystack…", "redirectingBody": "You're being sent to Paystack's secure page. We'll confirm your payment once it comes through.", "initError": "We couldn't start the payment. You haven't been charged. Please try again."
+    },
+    "paid": {"checking": "Confirming your payment…", "title": "Payment received", "orderNumber": "Order {number}", "nextTitle": "What happens next", "next1": "We confirm your order and line up your birds.", "next2": "We schedule your delivery and tell you the date and time.", "next3": "On delivery day you can track the driver and use your 4-digit code.", "viewOrder": "View my order", "receipt": "Receipt", "unknownTitle": "We haven't confirmed your payment yet", "unknownBody": "This can take a few minutes. If you were charged, your order will update on its own. Check your order page, or contact us if it doesn't."},
+    "failed": {"loading": "Checking your order…", "title": "Payment didn't go through", "notCharged": "You have not been charged.", "kept": "We'll keep your order for 24 hours so you can try again.", "tryAgain": "Try again", "backToOrders": "Back to my orders"},
+    "quoteReady": {
+      "title": "Your quote is ready", "loading": "Loading your quote…", "loadError": "Couldn't load this quote.", "intro": "Our team has priced your order.", "validUntil": "Valid until {when}", "expiredOn": "This quote expired on {when}", "pay": "Pay with Paystack", "decline": "Decline quote", "declineSure": "Decline this quote?", "declineYes": "Yes, decline", "declineNo": "Keep it", "declineError": "Couldn't decline the quote. Please try again.",
+      "status": {"open": "Open", "accepted": "You've already accepted this quote.", "expired": "This quote has expired.", "declined": "You declined this quote."}
+    },
+    "detail": {
+      "loading": "Loading your order…", "loadError": "Couldn't load this order.", "deliveryTitle": "Delivery", "timelineNotSet": "Delivery timeline not set yet", "timelineNotSetBody": "McCluckin's will schedule your delivery and tell you the date and time. You don't need to choose one.", "track": "Track delivery", "rate": "Rate delivery", "completePayment": "Complete payment",
+      "timelineTitle": "Order timeline", "noEvents": "Nothing has happened yet.", "paymentTitle": "Payment", "payment": {"none": "No payment yet", "pending": "Waiting for payment", "succeeded": "Paid", "failed": "Payment failed", "refunded": "Refunded", "disputed": "Under dispute"},
+      "invoiceTitle": "Invoice", "invoicePrint": "Print", "invoiceMeta": "Order {number} · {date}", "invoiceUnpaid": "This becomes a tax invoice once the order is paid.", "helpTitle": "Need help?", "helpBody": "If something isn't right with this order, tell us and we'll sort it out.", "reportProblem": "Report a problem", "viewCase": "View my case"
+    },
+    "track": {"title": "Track your delivery", "loading": "Finding your driver…", "loadError": "Couldn't load tracking.", "mapTitle": "Live map", "mapAlt": "Map of your delivery", "mapLive": "Live location coming soon", "mapSoon": "The map will appear on delivery day.", "eta": "Arriving around", "etaPending": "We'll confirm your arrival time on the day", "driverTitle": "Your driver", "driverPending": "A driver hasn't been assigned yet.", "call": "Call your driver", "callMasked": "Calls go through a McCluckin's number; your number and the driver's stay private.", "codeTitle": "Your delivery code", "codeAria": "Delivery code {code}", "codeHelp": "Give this code to the driver when they arrive. Don't share it before.", "codePending": "Your delivery code will appear here once your delivery is scheduled.", "backToOrder": "Back to order"},
+    "delivered": {"title": "Delivered", "loading": "Loading…", "loadError": "Couldn't load this delivery.", "countTitle": "Birds counted with the driver", "countHelp": "You ordered {n}. Count them with the driver at handover.", "rateTitle": "How was your delivery?", "thumbs": {"up": "Good", "down": "Not good"}, "comment": "Anything to add? (optional)", "send": "Send rating", "thanks": "Thanks for your feedback.", "rateError": "Couldn't save your rating. Please try again.", "problemTitle": "Something wrong?", "problemBody": "You can report a problem for up to 2 hours after delivery.", "report": "Report a problem", "windowClosed": "The 2-hour window to report a problem has passed. Please contact us and we'll help.", "orderAgain": "Order again"},
+    "problem": {
+      "title": "Report a problem", "loading": "Loading…", "forOrder": "Order {number}", "type": "What went wrong?", "birds": "How many birds were affected?", "description": "Tell us what happened", "photos": "Photos (up to {max})", "photosChosen": "{n} photo(s) selected", "submit": "Send report", "sending": "Sending…", "submitError": "Couldn't send your report. Please try again.",
+      "errors": {"type": "Choose what went wrong.", "birds": "Enter how many birds were affected.", "birdsTooMany": "That's more than you ordered.", "description": "Please tell us a little about what happened."}
+    },
+    "case": {"loading": "Loading your case…", "loadError": "Couldn't load this case.", "number": "Case number", "statusLabel": "Case status", "timeline": "Updates", "noEvents": "No updates yet. We'll respond soon.", "you": "You", "team": "McCluckin's", "kind": {"status": "Status update", "evidence": "Evidence added", "refund": "Refund update"}, "expectedRefund": "Expected refund", "expectedCredit": "Expected credit", "reply": "Add a message", "replyNeeded": "We need more information from you", "send": "Send", "replyError": "Couldn't send your message.", "viewOrder": "View the order", "photosFailed": "{n} photo(s) couldn't be uploaded. Your report was sent; you can add photos in a message."},
+    "profile": {
+      "title": "Profile", "business": "Business details", "businessName": "Business name", "phone": "WhatsApp number", "pdma": "PDMA number", "pdmaHelp": "Required if you resell more than 5 birds.", "language": "Language", "lang": {"en": "English", "zu": "isiZulu", "st": "Sesotho", "tn": "Setswana"}, "save": "Save changes", "saved": "Saved.", "saveError": "Couldn't save your changes.",
+      "addresses": "Delivery addresses", "noAddresses": "No saved addresses yet.", "default": "Default", "makeDefault": "Make default", "remove": "Remove", "addressError": "Couldn't update your addresses.", "addAddressHint": "New addresses are saved when you place an order.", "notifications": "Notifications", "notificationsNote": "Saved on this device for now.", "notify": {"whatsapp": "WhatsApp", "email": "Email", "sms": "SMS"}, "myCases": "My cases", "noCases": "No cases."
+    }
+  }
+}
