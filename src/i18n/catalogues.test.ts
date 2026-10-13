@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LOCALES, getCatalogue, isLocale, type Catalogue } from './index';
+import { LOCALES, flatten, getCatalogue, isLocale, type Catalogue } from './index';
 
 // Every catalogue file on disk, base and namespaced, keyed by its path.
 const files = {
@@ -15,11 +15,14 @@ describe('catalogue files', () => {
     expect(names.sort()).toEqual(LOCALES.map((l) => `./locales/${l.code}.json`).sort());
   });
 
-  it.each(Object.entries(files))('%s is a flat map of strings', (path, data) => {
+  it.each(Object.entries(files))('%s contains only strings (flat or nested)', (path, data) => {
     expect(data && typeof data === 'object' && !Array.isArray(data)).toBe(true);
-    for (const [key, value] of Object.entries(data)) {
-      expect(typeof value, `${path} -> ${key}`).toBe('string');
-    }
+    const check = (node: unknown, trail: string) => {
+      if (typeof node === 'string') return;
+      expect(node && typeof node === 'object' && !Array.isArray(node), `${path} -> ${trail}`).toBe(true);
+      for (const [k, v] of Object.entries(node as Record<string, unknown>)) check(v, `${trail}.${k}`);
+    };
+    check(data, '');
   });
 
   it.each(Object.keys(files))('%s is named <locale>.json or <locale>.<namespace>.json', (path) => {
@@ -40,8 +43,9 @@ describe('English is the source of truth', () => {
     const seen = new Map<string, string>();
     const dupes: string[] = [];
     for (const [path, data] of Object.entries(files)) {
-      if ((path.split('/').pop() ?? '').split('.')[0] !== 'en') continue;
-      for (const key of Object.keys(data)) {
+      // Namespaced files may restate shared base keys (common.*); only clashes between namespaces matter.
+      if ((path.split('/').pop() ?? '').split('.')[0] !== 'en' || path.startsWith('./locales/')) continue;
+      for (const key of Object.keys(flatten(data))) {
         if (seen.has(key)) dupes.push(`${key} (${seen.get(key)} and ${path})`);
         seen.set(key, path);
       }
