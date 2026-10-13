@@ -1,0 +1,172 @@
+{
+  "admin": {
+    "role": "Admin",
+    "logout": "Log out",
+    "nav": {
+      "label": "Admin sections",
+      "dashboard": "Dashboard", "orders": "Orders", "schedule": "Schedule", "users": "Users", "cases": "Cases",
+      "payouts": "Payouts", "compliance": "Compliance", "reports": "Reports", "settings": "Settings"
+    },
+    "common": {
+      "loading": "Loading...", "loadError": "Couldn't load this page: {message}", "none": "Nothing here yet", "all": "All",
+      "cancel": "Cancel", "close": "Close", "choose": "Choose...", "from": "From", "to": "To", "prev": "Previous", "next": "Next",
+      "pageOf": "Page {page} of {pages}", "exportCsv": "Export CSV", "select": "Select row", "selectAll": "Select all rows", "birds": "birds"
+    },
+    "errors": {
+      "not_forward": "A case can only move forward in its flow.",
+      "not_failed": "Only failed transfers can be retried.",
+      "resolution_required": "Choose a resolution first.",
+      "amount_required": "Enter the amount for this resolution.",
+      "amount_invalid": "The amount must be more than zero.",
+      "cost_owner_required": "Choose who carries the cost.",
+      "required": "A value is required.", "not_a_number": "Enter a number.", "percent_range": "A percentage must be between 0 and 100.",
+      "not_integer": "Enter a whole number.", "negative": "The value cannot be negative.", "out_of_range": "The value is outside the allowed range."
+    },
+    "status": {
+      "order": { "placed": "Placed", "paid": "Paid", "scheduled": "Scheduled", "ready": "Ready", "on_the_way": "On the way", "delivered": "Delivered", "settled": "Settled", "cancelled": "Cancelled", "refunded": "Refunded" },
+      "allocation": { "offered": "Offered", "accepted": "Accepted", "declined": "Declined", "ready": "Ready", "collected": "Collected" },
+      "profile": { "pending": "Pending", "active": "Active", "suspended": "Suspended" },
+      "document": { "missing": "Missing", "uploaded": "Uploaded", "approved": "Approved", "rejected": "Rejected" },
+      "case": { "open": "Open", "in_review": "In review", "awaiting_info": "Awaiting info", "resolved": "Resolved", "closed": "Closed" },
+      "transfer": { "queued": "Queued", "sent": "Sent", "success": "Success", "failed": "Failed", "reversed": "Reversed" },
+      "pdma": { "draft": "Draft", "submitted": "Submitted" }
+    },
+    "bird": { "broiler": "Broiler", "hardbody": "Hardbody", "indigenous": "Indigenous" },
+    "zone": { "none": "No zone", "surveillance": "Surveillance zone", "controlled": "Controlled zone" },
+    "party": { "supplier": "Supplier", "driver": "Driver" },
+    "lang": { "en": "English", "zu": "isiZulu", "st": "Sesotho", "tn": "Setswana" },
+    "caseType": { "short_count": "Short count", "sick_injured": "Sick or injured", "died": "Died", "late": "Late", "failed_delivery": "Failed delivery", "payment": "Payment", "other": "Other" },
+    "caseEvent": { "message": "Message", "status": "Status change", "evidence": "Evidence", "refund": "Refund" },
+    "resolution": { "refund": "Refund", "credit": "Credit", "replacement": "Replacement", "none": "No action" },
+    "costOwner": { "supplier": "Supplier", "driver": "Driver", "mccluckins": "McCluckin's" },
+    "doc": {
+      "pdma": "PDMA registration", "cipc": "CIPC registration", "tax_pin": "Tax PIN", "vat": "VAT certificate", "bank_letter": "Bank letter",
+      "ncd_ai_evidence": "NCD / avian influenza evidence", "hpai_permit": "HPAI permit", "movement_permit": "Movement permit",
+      "supplier_agreement": "Supplier agreement", "id": "ID document", "licence": "Driver's licence", "prdp": "PrDP", "operator_card": "Operator card",
+      "roadworthy": "Roadworthy certificate", "insurance": "Insurance", "contractor_agreement": "Contractor agreement", "training": "Training record", "vehicle_photo": "Vehicle photo"
+    },
+    "driverProblem": { "paused": "paused", "not_covered": "vehicle not covered", "capacity": "too small for this load", "crates": "not enough crates" },
+    "warn": {
+      "movementPermit": "Movement permit missing", "crossesProvince": "Crosses a province", "birdFlu": "Bird-flu zone",
+      "movementPermitBlock": "This load crosses a provincial border and has no state-vet movement permit on file. It cannot be scheduled yet.",
+      "birdFluBlock": "The supplier is in a bird-flu surveillance zone. Nothing moves without state-vet permission, so this cannot be scheduled yet."
+    },
+    "dashboard": {
+      "title": "Dashboard", "subtitle": "Today's trading, the pipeline and what needs you.", "loading": "Loading dashboard...",
+      "needsAction": "Needs your action", "allClear": "Nothing needs you right now.",
+      "ordersToday": "Orders today", "salesToday": "Sales today", "marginToday": "Margin today", "transfersQueued": "Transfers queued",
+      "pipeline": "Pipeline", "todayOrders": "Today's orders",
+      "action": {
+        "unscheduled": "Paid orders to schedule", "pending_accounts": "Accounts waiting for approval", "documents_to_review": "Documents to review",
+        "cases_overdue": "Cases past their first-reply time", "transfers_failed": "Failed transfers to retry"
+      }
+    },
+    "orders": {
+      "title": "Orders", "subtitle": "Every order, across all buyers.", "search": "Search order, buyer or town",
+      "emptyTitle": "No orders match", "emptyBody": "Try another status tab or clear the filters.", "notScheduled": "Not scheduled",
+      "filter": { "bird": "Bird type", "anyBird": "Any bird type", "province": "Province", "anyProvince": "Any province" },
+      "col": { "number": "Order", "buyer": "Buyer", "type": "Bird type", "birds": "Birds", "province": "Province", "delivery": "Delivery", "total": "Total", "status": "Status", "placed": "Placed" },
+      "bulk": {
+        "selected": "{count} selected", "export": "Export selected", "cancel": "Cancel unpaid orders",
+        "cancelTitle": "Cancel unpaid orders?", "cancelBody": "{count} unpaid order(s) will be cancelled. Paid orders are skipped. This cannot be undone.", "cancelConfirm": "Cancel orders"
+      }
+    },
+    "order": {
+      "title": "Order {number}", "titleLoading": "Order", "drivers": "Driver", "noAllocation": "Assign a supplier first, then pick a driver.",
+      "money": "Money", "moneyNote": "Supplier price is per bird. Transfer fees are R3 per transfer plus VAT.", "timeline": "Timeline", "timelineEmpty": "No events yet.",
+      "system": "System", "driverAssigned": "Driver: {name}", "driverNone": "No driver assigned yet.", "pickDriver": "Pick a driver", "assignDriver": "Assign driver"
+    },
+    "money": {
+      "birds": "Birds", "delivery": "Delivery", "serviceFee": "Service fee", "buyerPays": "Buyer pays", "supplierCost": "Supplier cost", "driverShare": "Driver share",
+      "paystackFee": "Paystack fee", "paystackFeeEst": "Paystack fee (estimated)", "transferFees": "Paystack transfer fees", "margin": "McCluckin's keeps",
+      "incomplete": "No supplier assigned yet, so this margin is not final."
+    },
+    "match": {
+      "title": "Supplier matching", "none": "No candidate suppliers", "assign": "Assign", "rematch": "Re-match", "sameProvince": "same province",
+      "current": "Current: {name} for {count} birds", "assignTitle": "Assign supplier?", "assignBody": "Assign {name} for {count} birds. The supplier will be offered the job.",
+      "rematchTitle": "Re-match this order?", "rematchConfirm": "Re-match", "refundConfirm": "Refund buyer in full", "newMargin": "Margin after re-match:",
+      "refundWarning": "The buyer will be refunded in full:",
+      "outcome": {
+        "cheaper_keep_price": "The new supplier is cheaper. The buyer keeps the price they paid and the extra margin is ours.",
+        "absorb": "The new supplier costs more. McCluckin's absorbs the difference because margin stays at zero or above.",
+        "full_refund": "The new supplier would push margin below zero, so the buyer gets a full refund."
+      },
+      "col": { "supplier": "Supplier", "distance": "Distance", "journey": "Journey", "price": "Price / bird", "landed": "Landed / bird", "stock": "Stock", "fit": "Requirements", "zone": "Bird-flu zone" },
+      "fit": { "ok": "Meets", "partial": "Partly", "fail": "Fails" }
+    },
+    "schedule": {
+      "title": "Schedule", "subtitle": "Paid orders waiting for a date, and who is driving when.", "card": "Delivery date and slot", "date": "Date", "slot": "Slot",
+      "save": "Schedule delivery", "current": "Scheduled for {date} {slot}", "buyerNote": "The buyer is told on WhatsApp and email. Buyers never choose a time.",
+      "awaiting": "Paid orders awaiting scheduling", "awaitingNone": "Every paid order is scheduled.", "distance": "Distance", "noSupplier": "No supplier yet", "warnings": "Warnings",
+      "grid": "Drivers and slots for {date}", "gridEmpty": "Add active drivers and delivery slots to see the grid.", "driver": "Driver", "free": "free",
+      "stock": "Supplier stock this week", "stockNone": "No stock recorded for this week."
+    },
+    "users": {
+      "title": "Users", "subtitle": "Approve pending accounts, review compliance documents, suspend or reactivate.",
+      "tab": { "pending": "Pending", "buyer": "Buyers", "supplier": "Suppliers", "driver": "Drivers", "admin": "Admins" },
+      "role": { "buyer": "Buyer", "supplier": "Supplier", "driver": "Driver", "admin": "Admin" },
+      "emptyTitle": "No users here",
+      "empty": { "pending": "No accounts are waiting for approval.", "buyer": "No buyers yet.", "supplier": "No suppliers yet.", "driver": "No drivers yet.", "admin": "No other admins." },
+      "noDetails": "No details on file", "signedUp": "Signed up {date}", "review": "Review", "approve": "Approve", "reject": "Reject", "suspend": "Suspend", "reactivate": "Reactivate", "activate": "Activate",
+      "rejectTitle": "Reject this application?", "rejectBody": "{name} will be marked suspended.",
+      "suspendTitle": "Suspend this account?", "suspendBody": "{name} will lose access immediately.",
+      "activateTitle": "Activate this account?", "activateBody": "{name} will be able to log in and receive jobs."
+    },
+    "review": {
+      "title": "Compliance review", "pickTitle": "Select a supplier or driver", "pickBody": "Choose Review on a supplier or driver to see their documents.",
+      "paused": "Paused", "noDocs": "No documents uploaded yet.", "expires": "Expires {date}", "noExpiry": "No expiry date", "expiringSoon": "Expires within 30 days", "expired": "Expired",
+      "view": "View file", "approveDoc": "Approve", "rejectDoc": "Reject", "rejectTitle": "Reject this document?", "rejectBody": "The {kind} will be marked rejected and the owner asked to upload it again.",
+      "noUrl": "Couldn't open that file.", "note": "Suppliers and drivers get no jobs until required documents are approved."
+    },
+    "cases": {
+      "title": "Cases", "subtitle": "Problems raised by buyers. First reply within 2 business hours.", "emptyTitle": "No cases", "emptyBody": "Nothing in this status.",
+      "pickTitle": "Select a case", "pickBody": "Click a case to see evidence, counts and the timeline.",
+      "col": { "number": "Case", "order": "Order", "type": "Type", "status": "Status", "reply": "First reply", "costOwner": "Cost owner", "amount": "Amount" },
+      "overdue": "Overdue {time}", "dueIn": "Due in {time}", "photos": "{count} photo(s) attached", "whoCounted": "Who counted what",
+      "count": { "ordered": "Ordered", "buyer": "Buyer says affected", "supplier": "Supplier counted at loading", "pickup": "Driver counted at pickup", "delivered": "Driver counted at delivery" },
+      "moveTo": "Move to", "resolution": "Resolution", "amount": "Amount in rands", "costOwner": "Cost owner", "advance": "Update status",
+      "advanceTitle": "Move case to {status}?", "advanceBody": "This is recorded on the case timeline and cannot be undone.", "advanceMoney": "This resolves the case with", "advanceConfirm": "Confirm",
+      "timeline": "Timeline", "visibleToBuyer": "Visible to buyer", "internal": "Internal note", "reply": "Write a reply or note", "send": "Add to timeline"
+    },
+    "payouts": {
+      "title": "Payouts", "subtitle": "Paystack transfers to suppliers and drivers.", "emptyTitle": "No transfers", "retry": "Retry", "retryTitle": "Retry this transfer?",
+      "retryBody": "Paystack will try to pay {name} again:", "bankFile": "Bank file (CSV)", "bankNote": "Bank file lists queued and failed transfers as a fallback if Paystack cannot pay them.",
+      "col": { "party": "Payee", "type": "Type", "amount": "Amount", "status": "Status", "code": "Transfer code", "reason": "Failure reason", "date": "Created" }
+    },
+    "compliance": {
+      "title": "Compliance", "subtitle": "PDMA, documents, permits and bird-flu exposure.", "pdma": "PDMA monthly reconciliation (due by the 15th)", "pdmaNone": "No reconciliation reports yet.",
+      "month": "Month", "due": "Due", "overdue": "Overdue", "submittedAt": "Submitted", "docs": "Documents expiring within 30 days", "docsNone": "No documents are expiring soon.",
+      "owner": "Owner", "document": "Document", "expires": "Expires", "left": "Time left", "days": "{count} day(s)", "permits": "Removal permits expiring (birds leave within 36 hours)",
+      "permitsNone": "No removal permits are close to expiry.", "validUntil": "Valid until", "zones": "Suppliers paused in bird-flu zones", "zonesNone": "No suppliers are paused in a bird-flu zone.",
+      "reason": "Reason", "crossing": "Trips crossing provinces", "crossingNone": "No open trips cross a provincial border.", "movementPermit": "Movement permit", "permitOnFile": "On file", "permitMissing": "Missing"
+    },
+    "reports": {
+      "title": "Reports", "subtitle": "Sales, margin and performance.", "range": "Date range", "lastDays": "Last {count} days", "none": "No data in this range", "chartAria": "Sales and margin by day",
+      "spend": "Spend", "jobs": "Jobs", "collected": "Collected", "trips": "Trips", "delivered": "Delivered", "rating": "Rating",
+      "kpi": { "orders": "Orders", "sales": "Sales", "margin": "Margin", "birds": "Birds sold", "aov": "Average order" },
+      "section": { "daily": "Revenue and margin by day", "areas": "Chickens by area", "buyers": "Top buyers", "suppliers": "Supplier performance", "drivers": "Driver performance" }
+    },
+    "settings": {
+      "title": "Settings", "subtitle": "Pricing, limits, provinces, languages and messages. Every change is written to the audit log.",
+      "newQuotesOnly": "Applies to new quotes only. Existing quotes and orders keep the prices they were made at.",
+      "saveAll": "Save changes", "save": "Save", "saved": "Saved.", "noChanges": "Nothing has changed.", "confirmTitle": "Save these changes?", "notSet": "not set", "cents": "cents",
+      "timelineHelp": "Leave blank while the delivery timeline is not set. A promise is added to buyer messages once known.",
+      "group": { "pricing": "Pricing model", "limits": "Quotes, orders and welfare limits", "timeline": "Delivery timeline" },
+      "key": {
+        "markup_pct": "Markup on supplier price (%)", "min_margin_cents": "Minimum margin per bird", "service_fee_pct": "Service fee (%)",
+        "delivery_base_cents": "Delivery base fee", "delivery_per_km_cents": "Delivery fee per km", "delivery_per_bird_cents": "Delivery fee per bird",
+        "driver_share_pct": "Driver share of delivery fee (%)", "quote_hold_minutes": "Quote held for (minutes)", "rfq_min_birds": "Request a quote above (birds)",
+        "rfq_max_km": "Request a quote above (km)", "min_order": "Minimum order (birds)", "unpaid_cancel_hours": "Cancel unpaid orders after (hours)",
+        "issue_window_hours": "Report-a-problem window (hours)", "heat_warn_c": "Heat warning above (degrees C)", "journey_warn_hours": "Journey warning above (hours)", "delivery_timeline": "Delivery timeline"
+      },
+      "error": {
+        "required": "A value is required.", "not_a_number": "Enter a number.", "percent_range": "A percentage must be between 0 and 100.",
+        "not_integer": "Enter a whole number.", "negative": "The value cannot be negative.", "out_of_range": "The value is outside the allowed range."
+      },
+      "integrations": "Payments and email", "paystack": "Paystack", "email": "Email", "modeTest": "Test mode", "modeLive": "Live", "emailSandbox": "Sandbox (Mailtrap)", "unknown": "Unknown",
+      "noSecrets": "Only the mode is shown. API keys and secrets are never displayed here.",
+      "provinces": "Provinces served", "areaActive": "Serving", "launchOrder": "Launch order", "areaBody": "Change how {name} is served.",
+      "languages": "Languages", "langBody": "Change whether {lang} is offered to users.", "templates": "Message templates", "templatesNone": "No message templates are stored yet."
+    }
+  }
+}
