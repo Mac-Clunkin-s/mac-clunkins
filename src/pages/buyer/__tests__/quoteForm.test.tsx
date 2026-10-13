@@ -42,7 +42,13 @@ describe('validateQuoteForm', () => {
 });
 
 describe('NewOrder form', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(api.listProvinces).mockResolvedValue([{ code: 'GP', name: 'Gauteng' }] as never);
+    vi.mocked(api.listAddresses).mockResolvedValue([]);
+    vi.mocked(api.listOrders).mockResolvedValue([]);
+    vi.mocked(api.saveAddress).mockResolvedValue('a1' as never);
+  });
 
   const fill = async (quantity: string) => {
     await screen.findByLabelText(/Province/);
