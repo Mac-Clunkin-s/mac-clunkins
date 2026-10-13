@@ -39,13 +39,25 @@ const namespacedFiles = import.meta.glob<Catalogue>('./*.*.json', {
   import: 'default',
 });
 
+/** Flatten nested JSON ({a:{b:"x"}}) into dotted keys ({"a.b":"x"}); flat files pass through. */
+export function flatten(data: unknown, prefix = '', out: Catalogue = {}): Catalogue {
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    for (const [k, v] of Object.entries(data as Record<string, unknown>)) {
+      const key = prefix ? `${prefix}.${k}` : k;
+      if (typeof v === 'string') out[key] = v;
+      else flatten(v, key, out);
+    }
+  }
+  return out;
+}
+
 function buildCatalogues(): Record<Locale, Catalogue> {
   const out: Record<Locale, Catalogue> = { en: {}, zu: {}, st: {}, tn: {} };
   const add = (path: string, data: Catalogue) => {
     // ./locales/en.json -> en ; ./zu.buyer.json -> zu
     const file = path.split('/').pop() ?? '';
     const code = file.split('.')[0];
-    if (isLocale(code)) Object.assign(out[code], data);
+    if (isLocale(code)) Object.assign(out[code], flatten(data));
   };
   // Base first so namespaced files can never be shadowed by it.
   for (const [path, data] of Object.entries(baseFiles)) add(path, data);
