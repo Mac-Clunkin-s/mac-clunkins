@@ -427,7 +427,7 @@ describe('9. an admin reads everything', () => {
       assert.equal((await q('select * from public.supplier_prices')).length, 4);
       assert.equal((await q('select * from public.supplier_details')).length, 2);
       assert.equal((await q('select * from public.payments')).length, 2);
-      assert.equal((await q('select key from public.settings')).length, 18);
+      assert.equal((await q('select key from public.settings')).length, 29);
       // The three column-restricted tables: every row, read through the admin view.
       assert.equal((await q('select * from public.admin_allocations')).length, 1);
       assert.equal((await q('select * from public.admin_trips')).length, 1);
