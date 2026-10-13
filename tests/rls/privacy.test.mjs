@@ -377,7 +377,7 @@ describe('8. anonymous reads only the public reference data', () => {
       assert.deepEqual(keys, [
         'delivery_timeline', 'issue_window_hours', 'min_order',
         'privacy_notice_effective_date', 'quote_hold_minutes',
-        'rfq_max_km', 'rfq_min_birds', 'terms_effective_date', 'unpaid_cancel_hours',
+        'rfq_max_km', 'rfq_min_birds', 'rfq_quote_hours', 'terms_effective_date', 'unpaid_cancel_hours',
       ]);
       for (const secret of ['markup_pct', 'min_margin_cents', 'service_fee_pct', 'driver_share_pct']) {
         await assertNoData(
