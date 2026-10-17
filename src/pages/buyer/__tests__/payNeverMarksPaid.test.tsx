@@ -6,6 +6,11 @@ import { authMock, makeOrder, renderAt } from './testUtils';
 
 vi.mock('../../../lib/supabase', () => ({ supabase: {} }));
 vi.mock('../../../auth/AuthContext', () => authMock());
+vi.mock('../../../lib/billing', () => ({
+  usePaymentsMode: () => ({ mode: 'paystack', ready: true }),
+  issueQuoteDocument: vi.fn(),
+  openBillingPdf: vi.fn(),
+}));
 vi.mock('../api', () => ({ getQuote: vi.fn(), getPayState: vi.fn(), getOrder: vi.fn() }));
 vi.mock('../lib/payments', async (orig) => ({
   ...(await orig<typeof import('../lib/payments')>()),

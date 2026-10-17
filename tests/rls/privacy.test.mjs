@@ -375,7 +375,7 @@ describe('8. anonymous reads only the public reference data', () => {
     await asRole(db, null, async ({ q, tryQ }) => {
       const keys = (await q('select key from public.settings order by key')).map((r) => r.key);
       assert.deepEqual(keys, [
-        'delivery_timeline', 'issue_window_hours', 'min_order',
+        'delivery_timeline', 'issue_window_hours', 'min_order', 'payments_mode',
         'privacy_notice_effective_date', 'quote_hold_minutes',
         'rfq_max_km', 'rfq_min_birds', 'rfq_quote_hours', 'support_phone', 'terms_effective_date', 'unpaid_cancel_hours',
       ]);
@@ -427,7 +427,7 @@ describe('9. an admin reads everything', () => {
       assert.equal((await q('select * from public.supplier_prices')).length, 4);
       assert.equal((await q('select * from public.supplier_details')).length, 2);
       assert.equal((await q('select * from public.payments')).length, 2);
-      assert.equal((await q('select key from public.settings')).length, 30);
+      assert.equal((await q('select key from public.settings')).length, 32);
       // The three column-restricted tables: every row, read through the admin view.
       assert.equal((await q('select * from public.admin_allocations')).length, 1);
       assert.equal((await q('select * from public.admin_trips')).length, 1);

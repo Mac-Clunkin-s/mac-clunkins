@@ -2,7 +2,9 @@ import { Link, useParams } from 'react-router-dom';
 import { FormError } from '../../components/FormField';
 import { PageSpinner } from '../../components/PageSpinner';
 import { formatCents } from '../../lib/format';
+import { usePaymentsMode } from '../../lib/billing';
 import { getOrder } from './api';
+import { BillingPanel } from './components/BillingPanel';
 import { BuyerLayout, Card } from './components/BuyerLayout';
 import { Line } from './components/LineItems';
 import { StatusBadge } from './components/StatusBadge';
@@ -33,6 +35,8 @@ function Body({ o }: { o: OrderDetailData }) {
   const live = ['scheduled', 'ready', 'on_the_way'].includes(o.status);
   const done = o.status === 'delivered' || o.status === 'settled';
   const paid = o.status !== 'placed' && o.status !== 'cancelled';
+  const { mode } = usePaymentsMode();
+  const manual = mode === 'manual';
 
   return (
     <div className="flex flex-col gap-4">
@@ -74,7 +78,7 @@ function Body({ o }: { o: OrderDetailData }) {
               {t('buyer.detail.rate')}
             </Link>
           )}
-          {o.status === 'placed' && o.quote_id && (
+          {!manual && o.status === 'placed' && o.quote_id && (
             <Link
               to={`/orders/new/pay?quote=${o.quote_id}`}
               className="rounded-full bg-chilli px-5 py-2 font-semibold text-cream"
@@ -104,6 +108,8 @@ function Body({ o }: { o: OrderDetailData }) {
           </ol>
         )}
       </Card>
+
+      {manual && <BillingPanel orderId={o.id} unpaid={o.status === 'placed'} />}
 
       <Card>
         <h2 className="font-heading font-bold">{t('buyer.detail.paymentTitle')}</h2>

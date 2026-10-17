@@ -167,6 +167,28 @@
       "noSecrets": "Only the mode is shown. API keys and secrets are never displayed here.",
       "provinces": "Provinces served", "areaActive": "Serving", "launchOrder": "Launch order", "areaBody": "Change how {name} is served.",
       "languages": "Languages", "langBody": "Change whether {lang} is offered to users.", "templates": "Message templates", "templatesNone": "No message templates are stored yet."
+    },
+    "billing": {
+        "title": "Payment and documents",
+        "amountDue": "Amount due: {amount}",
+        "method": "Payment method",
+        "reference": "Payment reference",
+        "note": "Note",
+        "markPaid": "Mark as paid",
+        "markPaidNote": "Confirms the full amount was received outside the app. This issues the receipt and starts fulfilment.",
+        "notPayable": "This order is not awaiting payment.",
+        "download": "Download PDF",
+        "methods": {
+            "eft": "EFT",
+            "cash": "Cash",
+            "card_machine": "Card machine",
+            "other": "Other"
+        },
+        "kind": {
+            "quote": "Quote",
+            "invoice": "Invoice",
+            "receipt": "Receipt"
+        }
     }
   }
 }

@@ -13,6 +13,7 @@ import { formatJourney, isEligible, rankCandidates } from './logic/matching';
 import { driverShareCents, evaluateRematch } from './logic/money';
 import { breakdownInput, orderMoney } from './logic/orderMoney';
 import { MoneyBreakdown } from './MoneyBreakdown';
+import { RecordPayment } from './RecordPayment';
 import type { AllocationRow, MatchCandidate } from './types';
 import { t } from './i18n';
 import {
@@ -71,6 +72,7 @@ function Body({ detail, reload }: { detail: Detail; reload: () => void }) {
       </div>
 
       <div className="flex flex-col gap-6">
+        <RecordPayment orderId={order.id} status={order.status} totalCents={order.total_cents} onDone={reload} />
         <section className={card}>
           <SectionTitle>{t('admin.order.money')}</SectionTitle>
           <MoneyBreakdown order={order} breakdown={money.breakdown} feeEstimated={money.feeEstimated} incomplete={money.incomplete} />
