@@ -71,7 +71,7 @@ export default function Login() {
         </Link>
         <h1 className="mt-6 font-heading text-2xl font-bold">Log in</h1>
         <p className="mt-1 font-body text-sm text-ink/60">
-          Email and password for now &mdash; phone sign-in is coming soon.
+          Log in with your email and password.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">

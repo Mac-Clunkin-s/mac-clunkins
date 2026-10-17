@@ -21,7 +21,7 @@ export default function ReviewPay() {
   const { data: quote, loading, error } = useAsync(() => getQuote(quoteId), [quoteId]);
   const now = useNow();
   const navigate = useNavigate();
-  const { mode } = usePaymentsMode();
+  const { mode, ready } = usePaymentsMode();
   const manual = mode === 'manual';
   const [terms, setTerms] = useState(false);
   const [refunds, setRefunds] = useState(false);
@@ -93,7 +93,9 @@ export default function ReviewPay() {
             </Card>
           )}
 
-          {manual ? (
+          {!ready ? (
+            <PageSpinner label={t('buyer.pay.loading')} />
+          ) : manual ? (
             <Card>
               <p className="text-sm text-ink/70">{t('buyer.billing.manualNote')}</p>
               <button type="button" onClick={() => void onQuotePdf()} className="mt-2 text-sm font-semibold text-chilli">
@@ -134,8 +136,8 @@ export default function ReviewPay() {
               </span>
             </label>
             <FormError message={payError} />
-            <Button disabled={!payable || !terms || !refunds || busy} onClick={() => void onPay()}>
-              {manual ? t(busy ? 'buyer.billing.placing' : 'buyer.billing.placeOrder') : redirecting ? t('buyer.pay.redirecting') : t('buyer.pay.cta')}
+            <Button disabled={!ready || !payable || !terms || !refunds || busy} onClick={() => void onPay()}>
+              {!ready ? t('buyer.pay.loading') : manual ? t(busy ? 'buyer.billing.placing' : 'buyer.billing.placeOrder') : redirecting ? t('buyer.pay.redirecting') : t('buyer.pay.cta')}
             </Button>
             {redirecting && (
               <p role="status" className="text-sm text-ink/70">

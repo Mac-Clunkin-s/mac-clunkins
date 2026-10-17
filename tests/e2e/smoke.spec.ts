@@ -5,7 +5,7 @@ import { ROUTES } from './helpers/routes';
 
 test('welcome screen shows the pitch and the three entry points', async ({ page }) => {
   await page.goto(ROUTES.welcome);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Live chickens');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Live chickens delivered to your door');
   await expect(page.getByRole('link', { name: 'Order now' })).toHaveAttribute('href', '/signup?role=buyer');
   await expect(page.getByRole('link', { name: 'Supply chickens' })).toHaveAttribute('href', '/signup?role=supplier');
   await expect(page.getByRole('link', { name: 'Drive for us' })).toHaveAttribute('href', '/signup?role=driver');

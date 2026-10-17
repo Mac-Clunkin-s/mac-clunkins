@@ -81,8 +81,8 @@ export default function SignUp() {
         <div className="w-full max-w-sm text-center">
           <h1 className="font-heading text-2xl font-bold">Check your email</h1>
           <p className="mt-3 font-body text-ink/70">
-            Confirm your address, then log in. Your account stays in review until an admin
-            approves it.
+            Confirm your email address, then log in. Suppliers and drivers also need our approval
+            before they can start.
           </p>
           <Link
             to="/login"
@@ -216,8 +216,7 @@ export default function SignUp() {
               onChange={(e) => setMarketingOptIn(e.target.checked)}
             />
             <span>
-              Send me offers and promotions by WhatsApp or email (optional — you can turn
-              this off any time).
+              Send me offers and promotions by WhatsApp or email (optional). You can switch this off any time.
             </span>
           </label>
           <FormError message={error} />

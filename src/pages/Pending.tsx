@@ -20,10 +20,10 @@ export default function Pending() {
         <h1 className="font-heading text-2xl font-bold">Awaiting approval</h1>
         <p className="mt-3 font-body text-ink/70">
           {profile
-            ? `Thanks, ${profile.full_name.split(' ')[0]}. Your account is in review.`
-            : 'Your account is in review.'}{' '}
-          An admin checks every new supplier and driver before they get jobs &mdash; we&rsquo;ll
-          notify you on WhatsApp the moment you&rsquo;re approved.
+            ? `${profile.full_name.split(' ')[0]}, your account is waiting for approval.`
+            : 'Your account is waiting for approval.'}{' '}
+          We check every new supplier and driver before giving out jobs. We&rsquo;ll message you
+          on WhatsApp once you&rsquo;re approved.
         </p>
 
         <ol className="mx-auto mt-8 flex max-w-xs flex-col gap-3 text-left">
