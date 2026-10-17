@@ -175,7 +175,7 @@
         "reference": "Payment reference",
         "note": "Note",
         "markPaid": "Mark as paid",
-        "markPaidNote": "Confirms the full amount was received outside the app. This issues the receipt and starts fulfilment.",
+        "markPaidNote": "Use this once the full amount has reached the bank account. It issues the receipt and releases the order for scheduling.",
         "notPayable": "This order is not awaiting payment.",
         "download": "Download PDF",
         "methods": {

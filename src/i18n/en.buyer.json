@@ -45,9 +45,9 @@
     "detail": {
       "loading": "Loading your order…", "loadError": "Couldn't load this order.", "deliveryTitle": "Delivery", "timelineNotSet": "Delivery timeline not set yet", "timelineNotSetBody": "McCluckin's will schedule your delivery and tell you the date and time. You don't need to choose one.", "track": "Track delivery", "rate": "Rate delivery", "completePayment": "Complete payment",
       "timelineTitle": "Order timeline", "noEvents": "Nothing has happened yet.", "paymentTitle": "Payment", "payment": {"none": "No payment yet", "pending": "Waiting for payment", "succeeded": "Paid", "failed": "Payment failed", "refunded": "Refunded", "disputed": "Under dispute"},
-      "invoiceTitle": "Invoice", "invoicePrint": "Print", "invoiceMeta": "Order {number} · {date}", "invoiceUnpaid": "This becomes a tax invoice once the order is paid.", "helpTitle": "Need help?", "helpBody": "If something isn't right with this order, tell us and we'll sort it out.", "reportProblem": "Report a problem", "viewCase": "View my case"
+      "invoiceTitle": "Invoice", "invoicePrint": "Print", "invoiceMeta": "Order {number} · {date}", "invoiceUnpaid": "Not paid yet.", "helpTitle": "Need help?", "helpBody": "Something wrong with this order? Tell us.", "reportProblem": "Report a problem", "viewCase": "View my case"
     },
-    "track": {"title": "Track your delivery", "loading": "Finding your driver…", "loadError": "Couldn't load tracking.", "mapTitle": "Live map", "mapAlt": "Map of your delivery", "mapLive": "Live location coming soon", "mapSoon": "The map will appear on delivery day.", "eta": "Arriving around", "etaPending": "We'll confirm your arrival time on the day", "driverTitle": "Your driver", "driverPending": "A driver hasn't been assigned yet.", "call": "Call your driver", "callMasked": "Calls go through a McCluckin's number; your number and the driver's stay private.", "codeTitle": "Your delivery code", "codeAria": "Delivery code {code}", "codeHelp": "Give this code to the driver when they arrive. Don't share it before.", "codePending": "Your delivery code will appear here once your delivery is scheduled.", "backToOrder": "Back to order"},
+    "track": {"title": "Track your delivery", "loading": "Finding your driver…", "loadError": "Couldn't load tracking.", "mapTitle": "Live map", "mapAlt": "Map of your delivery", "mapLive": "Live location is not available yet", "mapSoon": "The map will show on the day of delivery.", "eta": "Arriving around", "etaPending": "We'll confirm your arrival time on the day", "driverTitle": "Your driver", "driverPending": "A driver hasn't been assigned yet.", "call": "Call your driver", "callMasked": "Calls go through a McCluckin's number; your number and the driver's stay private.", "codeTitle": "Your delivery code", "codeAria": "Delivery code {code}", "codeHelp": "Give this code to the driver when they arrive. Don't share it before.", "codePending": "Your delivery code will appear here once your delivery is scheduled.", "backToOrder": "Back to order"},
     "delivered": {"title": "Delivered", "loading": "Loading…", "loadError": "Couldn't load this delivery.", "countTitle": "Birds counted with the driver", "countHelp": "You ordered {n}. Count them with the driver at handover.", "rateTitle": "How was your delivery?", "thumbs": {"up": "Good", "down": "Not good"}, "comment": "Anything to add? (optional)", "send": "Send rating", "thanks": "Thanks for your feedback.", "rateError": "Couldn't save your rating. Please try again.", "problemTitle": "Something wrong?", "problemBody": "You can report a problem for up to 2 hours after delivery.", "report": "Report a problem", "windowClosed": "The 2-hour window to report a problem has passed. Please contact us and we'll help.", "orderAgain": "Order again"},
     "problem": {
       "title": "Report a problem", "loading": "Loading…", "forOrder": "Order {number}", "type": "What went wrong?", "birds": "How many birds were affected?", "description": "Tell us what happened", "photos": "Photos (up to {max})", "photosChosen": "{n} photo(s) selected", "submit": "Send report", "sending": "Sending…", "submitError": "Couldn't send your report. Please try again.",
@@ -60,14 +60,14 @@
     },
     "billing": {
         "payTitle": "Pay by EFT",
-        "payBody": "Please pay {amount} by EFT using the details below. Use the reference exactly so we can match your payment.",
+        "payBody": "Pay {amount} by EFT to the account below. Use the reference exactly as shown so we can find your payment.",
         "bank": "Bank",
         "holder": "Account holder",
         "account": "Account number",
         "branch": "Branch code",
         "type": "Account type",
         "reference": "Reference",
-        "afterPay": "We'll confirm your payment manually and send your receipt here. This can take a little while.",
+        "afterPay": "We check payments by hand. Once yours is confirmed your receipt appears on this page.",
         "docsTitle": "Invoice and receipt",
         "noDocs": "No documents yet.",
         "download": "Download PDF",
@@ -79,7 +79,7 @@
         },
         "placeOrder": "Place order",
         "placing": "Placing your order…",
-        "manualNote": "You'll pay by EFT after placing the order. Your invoice and bank details appear on the next page.",
+        "manualNote": "You pay by EFT after you place the order. Your invoice and our bank details are on the next page.",
         "placeError": "Couldn't place your order. Please try again.",
         "downloadQuote": "Download quote PDF"
     }

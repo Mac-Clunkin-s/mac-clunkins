@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 const STEPS = [
   {
     title: '1. Order',
-    body: 'Pick a bird type and quantity, drop a pin anywhere in South Africa, and get an instant quote.',
+    body: 'Choose the bird type and how many you need, then drop a pin for the delivery address. You see the price straight away.',
   },
   {
-    title: '2. We source',
-    body: 'McCluckin’s matches you to a nearby approved supplier and schedules a driver.',
+    title: '2. We arrange it',
+    body: 'We pick an approved supplier near you and book a driver. You don’t deal with either of them.',
   },
   {
     title: '3. Delivered',
-    body: 'Your driver arrives with your live chickens; count them together and you’re done.',
+    body: 'The driver brings your chickens on the day we confirm. Count them together, then give the driver your delivery code.',
   },
 ];
 
@@ -46,11 +46,11 @@ export default function Welcome() {
       <main className="flex-1 px-6 sm:px-10">
         <section className="mx-auto max-w-3xl py-12 text-center sm:py-20">
           <h1 className="font-heading text-4xl font-extrabold leading-tight sm:text-5xl">
-            Live chickens, delivered anywhere in South Africa.
+            Live chickens delivered to your door.
           </h1>
           <p className="mx-auto mt-4 max-w-xl font-body text-lg text-ink/70">
-            McCluckin&rsquo;s connects shisanyamas, kota shops, taverns and caterers to approved
-            suppliers and a trusted delivery fleet &mdash; one order at a time.
+            Shisanyamas, kota shops, taverns and caterers order live chickens from us. We buy from
+            approved suppliers and deliver. Suppliers and drivers can sign up too.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link

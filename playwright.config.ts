@@ -15,6 +15,8 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
   use: {
     baseURL,
+    // Escape hatch for sandboxes whose preinstalled Chromium differs from this Playwright's pin.
+    launchOptions: process.env.E2E_CHROMIUM_PATH ? { executablePath: process.env.E2E_CHROMIUM_PATH } : {},
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     timezoneId: 'Africa/Johannesburg',
@@ -32,5 +34,9 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
+        env: {
+          VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+          VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY ?? 'ci-placeholder-anon-key',
+        },
       },
 });

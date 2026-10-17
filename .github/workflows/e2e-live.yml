@@ -1,0 +1,44 @@
+name: E2E (live Supabase)
+
+# Real Auth + PostgREST + Postgres from `supabase start`, with the repo migrations and seed applied.
+# Slower and heavier than the mocked suite in ci.yml, so it runs nightly and on demand, not on every PR.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  e2e-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start Supabase
+        run: |
+          [ -f supabase/config.toml ] || supabase init
+          supabase start -x studio,imgproxy,inbucket,logflare,vector,edge-runtime
+      - name: Export connection details
+        run: |
+          eval "$(supabase status -o env)"
+          echo "VITE_SUPABASE_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "VITE_SUPABASE_ANON_KEY=$ANON_KEY" >> "$GITHUB_ENV"
+          echo "E2E_SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY" >> "$GITHUB_ENV"
+          echo "E2E_LIVE_BACKEND=1" >> "$GITHUB_ENV"
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-live
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

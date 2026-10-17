@@ -35,8 +35,8 @@ function Body({ o }: { o: OrderDetailData }) {
   const live = ['scheduled', 'ready', 'on_the_way'].includes(o.status);
   const done = o.status === 'delivered' || o.status === 'settled';
   const paid = o.status !== 'placed' && o.status !== 'cancelled';
-  const { mode } = usePaymentsMode();
-  const manual = mode === 'manual';
+  const { mode, ready } = usePaymentsMode();
+  const manual = ready && mode === 'manual';
 
   return (
     <div className="flex flex-col gap-4">
@@ -78,7 +78,7 @@ function Body({ o }: { o: OrderDetailData }) {
               {t('buyer.detail.rate')}
             </Link>
           )}
-          {!manual && o.status === 'placed' && o.quote_id && (
+          {ready && !manual && o.status === 'placed' && o.quote_id && (
             <Link
               to={`/orders/new/pay?quote=${o.quote_id}`}
               className="rounded-full bg-chilli px-5 py-2 font-semibold text-cream"
