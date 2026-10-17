@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { FormError } from '../../components/FormField';
 import { PageSpinner } from '../../components/PageSpinner';
+import { issueQuoteDocument, openBillingPdf, usePaymentsMode } from '../../lib/billing';
+import { supabase } from '../../lib/supabase';
 import { getQuote } from './api';
 import { BuyerLayout, Card } from './components/BuyerLayout';
 import { CountdownBadge } from './components/CountdownBadge';
@@ -18,6 +20,9 @@ export default function ReviewPay() {
   const quoteId = params.get('quote') ?? '';
   const { data: quote, loading, error } = useAsync(() => getQuote(quoteId), [quoteId]);
   const now = useNow();
+  const navigate = useNavigate();
+  const { mode } = usePaymentsMode();
+  const manual = mode === 'manual';
   const [terms, setTerms] = useState(false);
   const [refunds, setRefunds] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -27,8 +32,28 @@ export default function ReviewPay() {
   const expired = !!quote && quote.expires_at !== null && remainingMs(quote.expires_at, now) === 0;
   const payable = !!quote && quote.status === 'open' && !expired;
 
+  async function onPlaceOrder() {
+    if (!quote) return;
+    setPayError(null);
+    setBusy(true);
+    const { data, error: rpcError } = await supabase.rpc('accept_quote_create_order', { p_quote_id: quote.id });
+    const orderId = (data as { order_id?: string } | null)?.order_id;
+    if (rpcError || !orderId) {
+      setPayError(t('buyer.billing.placeError'));
+      setBusy(false);
+      return;
+    }
+    navigate(`/orders/${orderId}`);
+  }
+
+  async function onQuotePdf() {
+    if (!quote) return;
+    try { await openBillingPdf(await issueQuoteDocument(quote.id)); } catch { setPayError(t('buyer.billing.error')); }
+  }
+
   async function onPay() {
     if (!quote) return;
+    if (manual) { await onPlaceOrder(); return; }
     setPayError(null);
     setBusy(true);
     try {
@@ -68,6 +93,14 @@ export default function ReviewPay() {
             </Card>
           )}
 
+          {manual ? (
+            <Card>
+              <p className="text-sm text-ink/70">{t('buyer.billing.manualNote')}</p>
+              <button type="button" onClick={() => void onQuotePdf()} className="mt-2 text-sm font-semibold text-chilli">
+                {t('buyer.billing.downloadQuote')}
+              </button>
+            </Card>
+          ) : (
           <Card>
             <h2 className="font-heading font-bold">{t('buyer.pay.methodsTitle')}</h2>
             <ul className="mt-2 flex flex-wrap gap-2">
@@ -79,6 +112,7 @@ export default function ReviewPay() {
             </ul>
             <p className="mt-2 text-xs text-ink/60">{t('buyer.pay.testMode')}</p>
           </Card>
+          )}
 
           <Card className="flex flex-col gap-3">
             <label className="flex items-start gap-3 text-sm">
@@ -101,7 +135,7 @@ export default function ReviewPay() {
             </label>
             <FormError message={payError} />
             <Button disabled={!payable || !terms || !refunds || busy} onClick={() => void onPay()}>
-              {redirecting ? t('buyer.pay.redirecting') : t('buyer.pay.cta')}
+              {manual ? t(busy ? 'buyer.billing.placing' : 'buyer.billing.placeOrder') : redirecting ? t('buyer.pay.redirecting') : t('buyer.pay.cta')}
             </Button>
             {redirecting && (
               <p role="status" className="text-sm text-ink/70">

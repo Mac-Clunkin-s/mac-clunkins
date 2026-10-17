@@ -57,6 +57,31 @@
     "profile": {
       "title": "Profile", "business": "Business details", "businessName": "Business name", "phone": "WhatsApp number", "pdma": "PDMA number", "pdmaHelp": "Required if you resell more than 5 birds.", "language": "Language", "lang": {"en": "English", "zu": "isiZulu", "st": "Sesotho", "tn": "Setswana"}, "save": "Save changes", "saved": "Saved.", "saveError": "Couldn't save your changes.",
       "addresses": "Delivery addresses", "noAddresses": "No saved addresses yet.", "default": "Default", "makeDefault": "Make default", "remove": "Remove", "addressError": "Couldn't update your addresses.", "addAddressHint": "New addresses are saved when you place an order.", "notifications": "Notifications", "notificationsNote": "Saved on this device for now.", "notify": {"whatsapp": "WhatsApp", "email": "Email", "sms": "SMS"}, "myCases": "My cases", "noCases": "No cases."
+    },
+    "billing": {
+        "payTitle": "Pay by EFT",
+        "payBody": "Please pay {amount} by EFT using the details below. Use the reference exactly so we can match your payment.",
+        "bank": "Bank",
+        "holder": "Account holder",
+        "account": "Account number",
+        "branch": "Branch code",
+        "type": "Account type",
+        "reference": "Reference",
+        "afterPay": "We'll confirm your payment manually and send your receipt here. This can take a little while.",
+        "docsTitle": "Invoice and receipt",
+        "noDocs": "No documents yet.",
+        "download": "Download PDF",
+        "error": "Couldn't load this document. Please try again.",
+        "kind": {
+            "quote": "Quote",
+            "invoice": "Invoice",
+            "receipt": "Receipt"
+        },
+        "placeOrder": "Place order",
+        "placing": "Placing your order…",
+        "manualNote": "You'll pay by EFT after placing the order. Your invoice and bank details appear on the next page.",
+        "placeError": "Couldn't place your order. Please try again.",
+        "downloadQuote": "Download quote PDF"
     }
   }
 }
